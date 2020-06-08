@@ -1,0 +1,11 @@
+function phSim = funcRandomPhaseProfile(M,N,phMag,filtWidth)
+phSim = zeros(M,N);
+x = linspace(-1,1,N);
+y = linspace(-1,1,M);
+[X,Y] = meshgrid(x,y);
+phSim = awgn(phSim,10);
+fftPh = fftshift(fft2(fftshift(phSim)));
+filtFFT = zeros(size(fftPh));
+filtFFT((X.^2+Y.^2) < filtWidth^2) = 1;
+fftPh =fftPh.*filtFFT;
+phSim = phMag*real(fftshift(fft2(fftshift(fftPh))));
